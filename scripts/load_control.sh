@@ -42,7 +42,7 @@ for i in $(eval echo "{1..$ITER}") ; do
         P95=`grep "95%" res.temp | cut -d" " -f 5`
         P99=`grep "99%" res.temp | cut -d" " -f 5`
 #        echo $QPS_LINE
-        RPSVAL=`echo $QPS_LINE | cut -d":" -f2`
+        RPSVAL=`echo $QPS_LINE | cut -d":" -f2 | tr -d '[:space:]'`
 #        echo "RPS1: $RPSVAL"
         RPSVAL=${RPSVAL%.*}
 #        echo "RPS2: $RPSVAL"
