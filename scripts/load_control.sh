@@ -15,7 +15,7 @@ if [ -z "$2" ]
 fi
 
 # limits for raise/keep the load in %, >=
-LIMIT_RAISE=1
+LIMIT_RAISE=95
 LIMIT_KEEP=85
 
 CVAL=$CPAR # conccurrent clients 
