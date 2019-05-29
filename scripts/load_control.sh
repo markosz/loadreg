@@ -24,7 +24,7 @@ RF=10   #increase by factor in%
 CDIFF=10 #increase by value
 INTERV="2s" #in sec 
 ITER=50 
-URL=http://node1:31428/hello 
+URL=http://node2:31909/hello
 echo "INPUT_QPS;OUTPUT_RPS;SUCC;AVG;P50;P95;P99;OPERATION" 
 for i in $(eval echo "{1..$ITER}") ; do
 
