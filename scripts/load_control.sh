@@ -18,13 +18,16 @@ fi
 LIMIT_RAISE=95
 LIMIT_KEEP=85
 
+#LATENCY limit
+LIMIT_LAT=0.04
+
 CVAL=$CPAR # conccurrent clients 
 QVAL=$QPAR # rate for 1 client 
 RF=10   #increase by factor in% 
 CDIFF=10 #increase by value
 INTERV="2s" #in sec 
 ITER=50 
-URL=http://node2:31909/hello
+URL=http://node2:31909/hello 
 echo "INPUT_QPS;OUTPUT_RPS;SUCC;AVG;P50;P95;P99;OPERATION" 
 for i in $(eval echo "{1..$ITER}") ; do
 
@@ -35,7 +38,7 @@ for i in $(eval echo "{1..$ITER}") ; do
   fi
 #       CVAL=20
 #       QVAL=20
-
+        CVAL=$(printf  %.0f "$CVAL")
         QPS=$(($CVAL * $QVAL))
 #        echo "Q: $QVAL, C: $CVAL, QPS: $QPS"
         hey -z $INTERV -c $CVAL -q $QVAL $URL > res.temp
@@ -49,15 +52,25 @@ for i in $(eval echo "{1..$ITER}") ; do
         RPSVAL=`echo $QPS_LINE | cut -d":" -f2 | tr -d '[:space:]'`
 #        echo "RPS1: $RPSVAL"
         RPSVAL=${RPSVAL%.*}
-#        echo "RPS2: $RPSVAL"
+#        echo "RPS2:xxx$RPSVAL"
         PRC=$((100 * $RPSVAL / $QPS))
 #        echo "%= $PRC"
+
+
+#latency based logic:
+    if (( $(echo "$P95 > $LIMIT_LAT" |bc -l) ))
+    then
+#       echo "latency limit violation"
+        OP="v"
+        CVAL=$( echo "$CVAL * (100 - $RF ) / 100" |bc -l)
+    else
+
+
+#RPS based logic:
         if [ $PRC -ge $LIMIT_RAISE ]
         then
-#                echo "raise"
-                CVAL=$(($CVAL * (100 + $RF ) / 100))
+                CVAL=$( echo "$CVAL * (100 + $RF ) / 100" | bc -l)
 #               CVAL=$(($CVAL + $CDIFF))
-
                 OP="^"
         elif [ $PRC -ge $LIMIT_KEEP ]
         then
@@ -67,9 +80,13 @@ for i in $(eval echo "{1..$ITER}") ; do
         else
                 OP="_"
 #               echo "backoff"
-                CVAL=$(($RPSVAL / $QVAL))
+                CVAL=$( echo "$RPSVAL / $QVAL " | bc -l)
 #                CVAL=$(($CVAL * (100 - $RF ) / 100))
         fi
 #        echo "newC= $CVAL"
+    fi
+
+
+
                 echo "$QPS;$RPSVAL;$PRC;$AVG;$P50;$P95;$P99;$OP"
 done
