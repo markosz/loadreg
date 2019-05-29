@@ -14,6 +14,10 @@ if [ -z "$2" ]
     QPAR=$2
 fi
 
+# limits for raise/keep the load in %, >=
+LIMIT_RAISE=1
+LIMIT_KEEP=85
+
 CVAL=$CPAR # conccurrent clients 
 QVAL=$QPAR # rate for 1 client 
 RF=10   #increase by factor in% 
@@ -48,14 +52,14 @@ for i in $(eval echo "{1..$ITER}") ; do
 #        echo "RPS2: $RPSVAL"
         PRC=$((100 * $RPSVAL / $QPS))
 #        echo "%= $PRC"
-        if [ $PRC -gt 94 ]
+        if [ $PRC -ge $LIMIT_RAISE ]
         then
 #                echo "raise"
                 CVAL=$(($CVAL * (100 + $RF ) / 100))
 #               CVAL=$(($CVAL + $CDIFF))
 
                 OP="^"
-        elif [ $PRC -gt 84 ]
+        elif [ $PRC -ge $LIMIT_KEEP ]
         then
                 OP="-"
 #                echo "keep"
