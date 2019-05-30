@@ -42,18 +42,17 @@ func makeMetric(dash *grada.Dashboard, name string) chan float64 {
             tim := time.NewTimer(idletime)
             for {
                 select {
-                case l := <-ch:
-                    metric.Add(l)
-                    // restart timer
-                    if !tim.Stop() {
-                        // if the timer has already expired we need to drain the channel manually
-                        <-tim.C
-                    }
-                    tim.Reset(idletime)
                 case <-tim.C:
                     //send 0 if no data was received for a while
                     metric.Add(0.0)
+                case l := <-ch:
+                    // restart timer
+                    if !tim.Stop() {
+                        // timer was expired, begin the new peak from 0
+                        metric.Add(0.0)
+                    }
                     tim.Reset(idletime)
+                    metric.Add(l)
                 }
             }
 
