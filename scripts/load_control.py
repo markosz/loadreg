@@ -115,7 +115,7 @@ def helpmsg():
 #    print sys.argv[0]
     print "Usage: "
     print "Mandatory parameter:"
-    print '   -u <URL> : HTTP server URL'
+    print '   -u <URL> : HTTP server URL, must start with http:// !!!'
     print "Optional parameters:"
     print '   -i <iterations, default: 50>'
     print '   -t <single test length in secs, default 2s>'
