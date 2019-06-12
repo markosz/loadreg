@@ -107,6 +107,7 @@ def main(argv):
          c_param = 1
 
        print ("%i;%.2f;%.2f;%.4f;%.4f;%.4f;%.4f;%s" % (qps, rps, succ_rate, avg, p50, p95 ,p99, op))
+       sys.stdout.flush()
        op = 'x'
 
    
