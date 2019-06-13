@@ -124,8 +124,8 @@ func main() {
             elems := strings.Split(sc.Text(), ";")
             if len(elems) == 8 {
                 //fmt.Printf("split: %q", elems)
-                equery, _   := strconv.ParseInt(elems[0], 10, 32)
-                erequest, _ := strconv.ParseInt(elems[1], 10, 32)
+                equery, _   := strconv.ParseFloat(elems[0], 64)
+                erequest, _ := strconv.ParseFloat(elems[1], 64)
                 esucc, _    := strconv.ParseFloat(elems[2], 64)
                 eavg, _     := strconv.ParseFloat(elems[3], 64)
                 ep50, _     := strconv.ParseFloat(elems[4], 64)
@@ -133,8 +133,8 @@ func main() {
                 ep99, _     := strconv.ParseFloat(elems[6], 64)
                 //eop, _      := elems[7]
 
-                queries <- float64(equery)
-                requests <- float64(erequest)
+                queries <- equery
+                requests <- erequest
                 success <- esucc
                 average <- eavg
                 p50 <- ep50
