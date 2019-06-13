@@ -100,9 +100,9 @@ func main() {
     tlen := makeMetric(dashb, "Line lengths")
 
     // metrics from Markosz
-    queries := makeMetric(dashb, "Queries")
-    requests := makeMetric(dashb, "Requests")
-    success := makeMetric(dashb, "Successrate")
+    queries := makeMetric(dashb, "Upper bound")
+    requests := makeMetric(dashb, "Load")
+    success := makeMetric(dashb, "Rate")
     average := makeMetric(dashb, "Average latency")
     p50 := makeMetric(dashb, "P 50%")
     p95 := makeMetric(dashb, "P 95%")
