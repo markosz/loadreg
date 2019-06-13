@@ -95,7 +95,8 @@ def main(argv):
             c_param =  int(c_param * (100 - rate_change_inp) / 100)
         if (not op == 'v'):
           if (succ_rate >= limit_raise):  #increase load level
-            c_param =  int(c_param * (100 + rate_change_inp) / 100)
+            c_new =  int(c_param * (100 + rate_change_inp) / 100)
+            c_param = max(c_new, c_param+1)
             op = '^'
           elif (succ_rate >= limit_keep): #keep load level
             op = '-'
